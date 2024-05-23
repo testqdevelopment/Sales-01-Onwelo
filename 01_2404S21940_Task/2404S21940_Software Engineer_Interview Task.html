@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting App</title>
+    <style>
+        /* Some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Voting App</h1>
+        <h2>Add Candidate</h2>
+        <input type="text" id="candidateName" placeholder="Candidate Name">
+        <button onclick="addCandidate()">Add Candidate</button>
+        <h2>Add Voter</h2>
+        <input type="text" id="voterName" placeholder="Voter Name">
+        <button onclick="addVoter()">Add Voter</button>
+        <h2>Candidates</h2>
+        <table id="candidatesTable">
+            <tr>
+                <th>Name</th>
+                <th>Votes</th>
+            </tr>
+        </table>
+        <h2>Voters</h2>
+        <table id="votersTable">
+            <tr>
+                <th>Name</th>
+                <th>Has Voted</th>
+            </tr>
+        </table>
+        <h2>Vote</h2>
+        <select id="candidateSelect">
+            <option value="" disabled selected>Select Candidate</option>
+        </select>
+        <select id="voterSelect">
+            <option value="" disabled selected>Select Voter</option>
+        </select>
+        <button onclick="Vote()">Submit</button>
+    </div>
+
+    <script>
+        let candidates = [];
+        let voters = [];
+
+        function addCandidate() {
+            const candidateName = document.getElementById("candidateName").value;
+            if (candidateName !== "") {
+                candidates.push({ name: candidateName, votes: 0 });
+                updateCandidatesTable();
+                document.getElementById("candidateName").value = "";
+            }
+        }
+
+        function addVoter() {
+            const voterName = document.getElementById("voterName").value;
+            if (voterName !== "") {
+                voters.push({ name: voterName, hasVoted: false });
+                updateVotersTable();
+                document.getElementById("voterName").value = "";
+            }
+        }
+
+        function updateCandidatesTable() {
+            const candidatesTable = document.getElementById("candidatesTable");
+            candidatesTable.innerHTML = `
+                <tr>
+                    <th>Name</th>
+                    <th>Votes</th>
+                </tr>
+            `;
+            candidates.forEach(candidate => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${candidate.name}</td>
+                    <td>${candidate.votes}</td>
+                `;
+                candidatesTable.appendChild(row);
+            });
+            updateCandidateSelect();
+        }
+
+        function updateVotersTable() {
+            const votersTable = document.getElementById("votersTable");
+            votersTable.innerHTML = `
+                <tr>
+                    <th>Name</th>
+                    <th>Has Voted</th>
+                </tr>
+            `;
+            voters.forEach(voter => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${voter.name}</td>
+                    <td>${voter.hasVoted ? "Yes" : "No"}</td>
+                `;
+                votersTable.appendChild(row);
+            });
+            updateVoterSelect();
+        }
+
+        function updateCandidateSelect() {
+            const candidateSelect = document.getElementById("candidateSelect");
+            candidateSelect.innerHTML = `<option value="" disabled selected>Select Candidate</option>`;
+            candidates.forEach(candidate => {
+                const option = document.createElement("option");
+                option.text = candidate.name;
+                option.value = candidate.name;
+                candidateSelect.appendChild(option);
+            });
+        }
+
+        function updateVoterSelect() {
+            const voterSelect = document.getElementById("voterSelect");
+            voterSelect.innerHTML = `<option value="" disabled selected>Select Voter</option>`;
+            voters.forEach(voter => {
+                const option = document.createElement("option");
+                option.text = voter.name;
+                option.value = voter.name;
+                voterSelect.appendChild(option);
+            });
+        }
+
+        function Vote() {
+            const candidateName = document.getElementById("candidateSelect").value;
+            const voterName = document.getElementById("voterSelect").value;
+
+            if (candidateName && voterName) {
+                const candidate = candidates.find(candidate => candidate.name === candidateName);
+                const voter = voters.find(voter => voter.name === voterName);
+
+                if (candidate && voter && !voter.hasVoted) {
+                    candidate.votes++;
+                    voter.hasVoted = true;
+                    updateCandidatesTable();
+                    updateVotersTable();
+                } else {
+                    alert("Invalid vote! Make sure both candidate and voter are selected and the voter hasn't voted yet.");
+                }
+            } else {
+                alert("Please select both candidate and voter.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+The csv files are sent by the client to the email address you have access to. The files are to be downloaded automatically because they have a fixed name. The files are to be saved on the Azure platform.
+
+1. What tools will you use to download the files, where will you save them?
+
+Ans : If clients give me the access of git then i wll download file via mail directy/git thean that file save on my Aws s3 bucket or on my desktop path.
+
+Example:-Use a combination of Python scripts and the IMAP/POP3 email protocol to download the CSV files from the email.
+
+2. What will be the connection between the tools you choose?
+
+Ans :- If i stored that file on s3 i will give direct path using my pyspark script/spark or using python script.
+Example:- Python script connects to the email server using the IMAP/POP3 protocol.
+The script then downloads the files and uses the Azure SDK for Python (Azure Storage Blob client library) to upload the files to Azure Blob Storage.
+
+After saving, the files are to be cleaned of rows that are empty, 
+
+Ans:-NoSQL Database/sql database  Use Azure Synapse Analytics (formerly SQL Data Warehouse) in serverless mode to store the cleaned data
+Example:- Cleaning Tool: Use Azure Data Factory or Azure Databricks to clean the CSV files.
+
+and after cleaning, the file is to be saved in such a way that they are available in the SQL serverless database. 
+   You should connect PowerBi to this server and publish the report online.
+Ans:-Power BI: Connect Power BI to Azure Synapse Analytics using the built-in connector for Azure Synapse.
+      Publishing Report: Publish the Power BI report to the Power BI Service.
+      Monitoring and notifying users:
+      Orchestration Tool: Use Azure Data Factory to orchestrate the entire process.
+      Monitoring: Monitor the pipeline execution using Azure Data Factory monitoring features.
+      Notification: Use Azure Logic Apps or Azure Functions to send email notifications about the process execution or errors.
+1. With what tools will you do this and what will the connection between them look like?
+Ans:- please find tool below This comprehensive setup ensures automated data flow, cleaning, storage, visualization, 
+     and monitoring with effective error handling and notification.:-
+     Python Script & Email Server: Uses IMAP/POP3 to download CSV files.
+     Python Script & Azure Blob Storage: Uses Azure Blob Storage SDK to upload files.
+     ADF & Blob Storage: Reads raw files for processing.
+     ADF & Synapse: Processes and stores cleaned data.
+     Power BI & Synapse: Connects for data visualization.
+     ADF & Logic Apps/Functions: Sends notifications on pipeline status.
+
+2. How will the connection between the SQL database and PowerBi online report look like?
+Ans:- Create a Report in Power BI Desktop:
+Download and install Power BI Desktop if you don't already have it.
+Get Data:
+Open Power BI Desktop.
+Click on Get Data on the Home ribbon.
+Select Azure > Azure Synapse Analytics (SQL Data Warehouse) and click Connect.
+Connect to Azure Synapse Analytics:
+
+Enter Server and Database Information:
+Enter the server name and the database name of your Azure Synapse Analytics.
+Click OK.
+Authentication:
+Choose your authentication method (Windows, Database, or Microsoft Account).
+Enter your credentials and click Connect.
+Create and Design Your Report:
+
+Load Data:
+Select the tables or views you want to import from Synapse Analytics.
+Click Load to import the data into Power BI.
+Build Visuals:
+Use the imported data to create visualizations, charts, and reports in Power BI Desktop.
+Publish the Report to Power BI Service:
+
+Save Your Report:
+Save your report by clicking File > Save As.
+Publish:
+Click Publish on the Home ribbon.
+Sign in to your Power BI account.
+Select the workspace where you want to publish the report and click Select.
+Connections Between Tools
+Power BI Desktop and Azure Synapse Analytics:
+
+Power BI Desktop connects directly to Azure Synapse Analytics using the Azure Synapse Analytics connector.
+This connection allows Power BI to import data from Synapse Analytics for visualization and reporting.
+Power BI Service:
+
+Once the report is published, it is hosted in the Power BI Service.
+The Power BI Service can refresh the dataset by reconnecting to Azure Synapse Analytics, ensuring the data is up-to-date.
+Connection Details
+Power BI Desktop to Azure Synapse Analytics:
+
+Connector: Power BI provides a native connector for Azure Synapse Analytics.
+Authentication: You can authenticate using Windows Authentication, Database Authentication, or Microsoft Account.
+Data Import: Power BI imports data into its in-memory storage for fast performance when creating visuals.
+Power BI Service to Azure Synapse Analytics:
+
+Dataset Refresh: Power BI Service can be scheduled to refresh the dataset at regular intervals, 
+reconnecting to Azure Synapse Analytics to fetch the latest data.
+Gateway: If necessary, configure an On-premises Data Gateway for secure data transfer.
+Monitoring and Refreshing
+Schedule Refresh:
+
+In the Power BI Service, go to Datasets and select the dataset associated with your report.
+Configure Scheduled refresh to define the frequency and time for the dataset to refresh.
+Data Alerts and Notifications:
+
+Set up data alerts in Power BI Service for key metrics.
+Use Power BIâ€™s alerting feature to notify users via email when data exceeds certain thresholds.
+In addition, write how the particular items will be run and what tool you will use to monitor the entire process 
+and inform the user via email about the execution or error in the process.
+
+
+3.write how the particular items will be run and what tool you will use to monitor the entire process and 
+    inform the user via email about the execution or error in the process.
+
+Overview of Steps
+Downloading Files from Email and Saving to Azure
+Cleaning the Files and Saving to SQL Serverless Database
+Connecting Power BI to Azure Synapse Analytics and Publishing the Report
+Monitoring and Notifications
+Detailed Steps and Monitoring
+1. Downloading Files from Email and Saving to Azure
+
+Tools:
+Python Script: Scheduled to run periodically (e.g., via Azure Functions or an Azure VM with a cron job).
+Azure Blob Storage: For saving the downloaded files.
+Execution:
+
+Schedule the Python script to run periodically to check the email and download the files.
+
+Monitoring:
+Azure Monitor: To monitor the execution of the script, using logs and alerts.
+Azure Application Insights: To track the health and performance of the script.
+
+Notification:
+Azure Logic Apps: To send email notifications on success or failure.

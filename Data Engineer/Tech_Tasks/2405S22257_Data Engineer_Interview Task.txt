@@ -1,0 +1,55 @@
+The csv files are sent by the client to the email address you have access to. The files are to be downloaded automatically because they have a fixed name. The files are to be saved on the Azure platform.
+1. What tools will you use to download the files, where will you save them?
+2. What will be the connection between the tools you choose?
+After saving, the files are to be cleaned of rows that are empty, and after cleaning, the file is to be saved in such a way that they are available in the SQL serverless database. You should connect PowerBi to this server and publish the report online.
+1. With what tools will you do this and what will the connection between them look like?
+2. How will the connection between the SQL database and PowerBi online report look like?
+In addition, write how the particular items will be run and what tool you will use to monitor the entire process and inform the user via email about the execution or error in the process.
+
+
+#################################################################################################################################################################################################################################################################
+
+solution:- Steps Overview
+   
+           1)Email account(employee personal email id)
+
+           2)LOGIC APP (download files) → Azure Storage account (upload files)--Office 365 Outlook connector to connect to an email account
+
+           3)ADLS GEN-2(retrieve files OR RAW DATA)--connect to databricks using mounting
+
+           4)DATABRICKS and Logic App( Data cleaning and monitor job can be configured to send email notifications upon successful execution or errors) 
+ 
+           5)Azure SQL Database serverless(store cleaned data)--write data from databricks to sql database
+
+           6)Power BI (create report and published online report)
+
+           
+
+
+
+1.- I use Logic App to download the file with fixed name that file which send on the my email address
+The Logic App will connect to the email account using the appropriate connector and authenticate with the necessary credentials, 
+then Logic App also connect to Azure Storage account(ADLS GEN-2) to upload the downloaded files.
+Office 365 Outlook connector to connect to an email account
+
+2.-Use databricks as a etl tool to connect to adls gen-2  using mounting to extract raw data and peprocess that data and finally writh to data to 
+Azure SQL Database(cleaned data) where is cleaned data and job is monitoring through the send email notifications upon successful
+execution or errors, using an external library or service ( sendgrid, SMTP)
+
+or
+
+ a Separate Logic App can be created to monitor the Databricks job runs and send email notifications based on the run status.
+
+
+3.- After cleanning load cleaned data to Azure SQL Database(
+    df.write.mode("overwrite").jdbc(url=url, table=table_name, mode="overwrite", properties={
+    "user": user,
+    "password": password
+})
+
+
+
+4.-Finally connect the power bi to Azure SQL Database by using get data from power bi and then in power bi to create the entitiy-relationship and then 
+crate report and finally published the report
+
+

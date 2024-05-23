@@ -1,0 +1,73 @@
+
+Task: Automate the process of downloading CSV files from an email, cleaning the data, and generating a report in PowerBI.
+
+1. Downloading CSV Files and Saving to Azure Blob Storage
+
+Tools:
+-Azure Logic Apps: For automating the download process.
+-Azure Blob Storage: For storing the downloaded CSV files.
+
+Steps:
+ 1.Monitor Email Inbox:
+   - Use Azure Logic Apps to monitor the specified email inbox for incoming emails.
+   - Configure the Logic App to trigger when an email with the fixed file name is received.
+
+ 2. Download and Save Files:
+   - Set up the Logic App to download the attached CSV files.
+   - Save the downloaded files to a designated folder in **Azure Blob Storage**.
+
+2. Cleaning CSV Files and Saving to SQL Serverless Database
+
+Tools:
+- Azure Databricks: For cleaning and processing the data.
+- Azure SQL Serverless: For storing the cleaned data.
+
+Steps:
+ 1. Read and Clean Data:
+   - Use Azure Databricks to read the CSV files from Azure Blob Storage.
+   - Clean the data by removing rows that are completely empty.
+
+    ```python
+    from pyspark.sql import SparkSession
+
+    spark = SparkSession.builder.appName("CSV Cleaning").getOrCreate()
+    df = spark.read.csv("path/to/blob/storage/folder", header=True, inferSchema=True)
+    cleaned_df = df.dropna(how='all')
+    ```
+
+ 2. Save Cleaned Data:
+   - Write the cleaned data to the **Azure SQL Serverless** database.
+
+    ```python
+    cleaned_df.write.format("jdbc").option("url", "jdbc:sqlserver://<server-name>.database.windows.net;database=<database-name>").option("dbtable", "cleaned_data").option("user", "<username>").option("password", "<password>").save()
+    ```
+
+ 3. Connecting PowerBI to SQL Serverless Database and Publishing Report Online
+
+Tools:
+-PowerBI: For creating and publishing reports.
+
+Steps:
+ 1. Connect to Database:
+   - Use PowerBI Desktop to connect to the Azure SQL Serverless database.
+   - Import the cleaned data into PowerBI.
+
+ 2. Create and Publish Report:
+   - Create the report using the data in PowerBI.
+   - Publish the report to the PowerBI service
+   
+
+4. Monitoring and Email Notifications**
+
+Tools:
+- Azure Monitor: For tracking the entire process.
+- Azure Logic Apps: For sending email notifications.
+
+Steps:
+ 1. Setup Monitoring:
+   - Use Azure Monitor to track the steps of the process: file download, data cleaning, and report publishing.
+   - Configure alerts for any errors or issues during the process.
+
+ 2. Email Notifications:
+   - Create another Azure Logic App to handle email notifications based on alerts from **Azure Monitor**.
+   - Set up the Logic App to send email notifications to the user, providing information on the execution status or any errors.
