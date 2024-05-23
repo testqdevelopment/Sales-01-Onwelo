@@ -1,3 +1,3 @@
 # Onwelo-
 Software Engineer Tasks </br>
-Data Engineer profiles & Tasks
+Data Engineer Profiles & Tasks
